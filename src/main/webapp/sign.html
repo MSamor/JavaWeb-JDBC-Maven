@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/jquery.js"></script>
+    <title>注册</title>
+</head>
+
+<body>
+    <div>注册一个账号</div>
+    <input id="account" type="text" name="" id="" placeholder="账号"></br>
+    <input id="username" type="text" name="" id="" placeholder="用户名"></br>
+    <input id="password" type="password" name="" id="" placeholder="密码"></br>
+    <select id="roleId">
+    </select>
+
+    <select id="classId">
+    </select>
+
+    <div style="display: flex;">
+        <div onclick="sign()">注册</div>
+        <div><a href="./index.html">登录</a></div>
+    </div>
+</body>
+
+<script>
+    function aClass() {
+        $.ajax({
+            async: true,
+            url: 'http://localhost:8080/class',
+            type: 'GET',
+            dataType: 'json',
+            timeout: 30000,
+            success: function (res) {
+                let options = ""
+                res.data.forEach(el => {
+                    options += `<option value="${el.id}">${el.className}</option>`
+                });
+                $("#classId").append(options)
+            },
+        })
+    }
+    function roles() {
+        $.ajax({
+            async: true,
+            url: 'http://localhost:8080/role',
+            type: 'GET',
+            dataType: 'json',
+            timeout: 30000,
+            success: function (res) {
+                let options = ""
+                res.data.forEach(el => {
+                    options += `<option value="${el.id}">${el.roleName}</option>`
+                });
+                $("#roleId").append(options)
+            },
+        })
+    }
+    function sign() {
+        $.ajax({
+            async: true,
+            url: 'http://localhost:8080/sign',
+            type: 'POST',
+            data: {
+                account: $("#account").val(),
+                password: $("#password").val(),
+                username: $("#username").val(),
+                roleId: $("#roleId").val(),
+                classId: $("#classId").val(),
+            },
+            dataType: 'json',
+            timeout: 30000,
+            success: function (res) {
+                alert(res.msg)
+            },
+        })
+    }
+
+    this.roles()
+    this.aClass()
+</script>
+
+</html>

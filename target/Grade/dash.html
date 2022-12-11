@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/jquery.js"></script>
+    <title>主页</title>
+</head>
+
+<body>
+    <div onclick="logout()">退出登录</div>
+    <div id="box"></div>
+</body>
+<script>
+
+    let token = localStorage.getItem("token")
+    if (token != 1) {
+        location.href = "./index.html"
+    }
+
+    let classId = JSON.parse(localStorage.getItem("data")).classId
+
+    if (JSON.parse(localStorage.getItem("data")).role.id == 2) {
+        $("#box").append("班长,本班成员:")
+        $.ajax({
+            async: true,
+            url: 'http://localhost:8080/infoClass',
+            type: 'GET',
+            data: { id: classId },
+            dataType: 'json',
+            timeout: 30000,
+            success: function (res) {
+                let divs = ""
+                res.data.forEach(el => {
+                    divs += `<div><span>${el.account}</span>-<span>${el.username}</span></div>`
+                });
+
+                $("#box").append(divs)
+            },
+        })
+    }
+
+    if (JSON.parse(localStorage.getItem("data")).role.id == 1) {
+        $("#box").append("你好，辅导员")
+    }
+
+    if (JSON.parse(localStorage.getItem("data")).role.id == 3) {
+        $("#box").append("学生,你的绩点为:"+JSON.parse(localStorage.getItem("data")).point)
+
+    }
+
+    function logout() {
+        localStorage.clear()
+        location.href = "./index.html"
+    }
+</script>
+
+</html>

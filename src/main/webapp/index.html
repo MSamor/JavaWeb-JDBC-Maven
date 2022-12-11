@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/jquery.js"></script>
+    <title>班务管理系统</title>
+</head>
+
+<body>
+    <div>班务管理系统</div>
+    <input id="account" type="text" name="" id="" placeholder="账号"></br>
+    <input id="password" type="password" name="" id="" placeholder="密码"></br>
+    <div onclick="login()">登录</div>
+    <div><a href="./sign.html">没有账号？去注册</a></div>
+</body>
+
+<script>
+
+    localStorage.clear()
+
+    function login() {
+        $.ajax({
+            async: true,
+            url: 'http://localhost:8080/login',
+            type: 'POST',
+            data: { account: $("#account").val(), password: $("#password").val() },
+            dataType: 'json',
+            timeout: 30000,
+            success: function (res) {
+                alert(res.msg)
+                if (res.code != 200) {
+                    return
+                }
+                localStorage.setItem("token", 1)
+                localStorage.setItem("data", JSON.stringify(res.data))
+                location.href = "./dash.html"
+            },
+        })
+    }
+
+</script>
+
+</html>
